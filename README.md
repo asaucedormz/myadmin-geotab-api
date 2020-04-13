@@ -22,7 +22,7 @@ Examples:
 Using Async/Await Promises
 
 ```js
-const MyAdminAPI = require('myadmin-api-node');
+const MyAdminAPI = require('myadmin-geotab-api');
 
 (async function main() {
   const username = 'user@domain.com';
@@ -45,7 +45,7 @@ const MyAdminAPI = require('myadmin-api-node');
 ```
 
 ```js
-const MyAdminAPI = require('myadmin-api-node');
+const MyAdminAPI = require('myadmin-geotab-api');
 
 (async function main() {
   const username = 'user@domain.com';
@@ -77,7 +77,7 @@ const MyAdminAPI = require('myadmin-api-node');
 Using Promises then catch
 
 ```js
-const MyAdminAPI = require('myadmin-api-node');
+const MyAdminAPI = require('myadmin-geotab-api');
 
 (function main() {
   const username = 'user@domain.com';
