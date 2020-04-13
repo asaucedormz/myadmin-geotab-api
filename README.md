@@ -1,4 +1,4 @@
-# myadmin-api-node
+# myadmin-geotab-api
 
 Unofficial nodejs client for myadmin.geotab.com
 https://myadmin.geotab.com/sdk#/api-reference
@@ -8,7 +8,7 @@ https://myadmin.geotab.com/sdk#/api-reference
 Using npm:
 
 ```shell
-$ npm i myadmin-api-node
+$ npm i myadmin-geotab-api
 ```
 
 Note: add --save if you are using npm < 5.0.0
