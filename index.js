@@ -47,17 +47,25 @@ class MyAdminAPI {
       method,
       params,
     });
-    const data = (
-      await fetch(this.serverUrl, {
-        method: 'POST',
-        body,
-        headers: { 'Content-Type': 'application/json' },
-      }).then((res) => res.json())
-    ).result;
-    return data;
+    const data = await fetch(this.serverUrl, {
+      method: 'POST',
+      body,
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => res.json());
+
+    if (data.error && data.error.errors) {
+      const error = new Error(data.error.message);
+      error.name = data.error.errors[0].name;
+      error.code = data.error.code;
+      throw error;
+    }
+    return data.result;
   }
 
   async authenticateAsync() {
+    if (!this.credentials.password) {
+      throw new Error('Must supply password for authenticate');
+    }
     const params = {
       username: this.credentials.username,
       password: this.credentials.password,
