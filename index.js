@@ -2,24 +2,29 @@ const fetch = require('node-fetch');
 
 class MyAdminAPI {
   constructor({
-    username = null,
-    password = null,
     apiKey = null,
+    password = null,
     sessionId = null,
     uri = null,
+    username = null,
   }) {
+		if (!apiKey) {
+			throw new Error('Must supply apiKey.');
+		}
+		if (!password) {
+			throw new Error('Must supply password.');
+		}
+		if (!sessionId) {
+		  throw new Error('Must supply sessionId.');
+		}
     if (!username) {
-      throw new Error('Must supply username');
-    }
-
-    if (!password && !sessionId && !apiKey) {
-      throw new Error('Must supply password OR sessionId and apiKey');
+      throw new Error('Must supply username.');
     }
     this.serverUrl = uri || 'https://myadminapi.geotab.com/v2/MyAdminApi.ashx';
     this.credentials = {
-      username,
-      password,
       apiKey,
+      password,
+      username,
       sessionId,
     };
   }
