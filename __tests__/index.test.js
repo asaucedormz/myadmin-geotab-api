@@ -1,13 +1,14 @@
 const MyAdminAPI = require('../index')
 
+const constructorProperties = {
+	apiKey: 'an apiKey',
+	password: 'a password',
+	sessionId: 'a sessionId',
+	uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx',
+	username: 'a username'
+}
+
 describe('MyAdminAPI constructor', () => {
-	const constructorProperties = {
-		apiKey: 'an apiKey',
-		password: 'a password',
-		sessionId: 'a sessionId',
-		uri: null,
-		username: 'a username'
-	}
 	const instantiateClass = (obj) => {
 		return () => {
 			return new MyAdminAPI(obj)
@@ -42,7 +43,10 @@ describe('MyAdminAPI constructor', () => {
 		})).toThrow('Must supply username.')
 	})
 	it('uses production url by default', () => {
-		expect(new MyAdminAPI(constructorProperties).serverUrl).toEqual('https://myadminapi.geotab.com/v2/MyAdminApi.ashx')
+		expect(new MyAdminAPI({
+			...constructorProperties,
+			uri: null
+		}).serverUrl).toEqual('https://myadminapi.geotab.com/v2/MyAdminApi.ashx')
 	})
 	it('uses given url', () => {
 		expect(new MyAdminAPI({
@@ -57,5 +61,17 @@ describe('MyAdminAPI constructor', () => {
 			sessionId: 'a sessionId',
 			username: 'a username'
 		})
+	})
+})
+
+describe.only('MyAdminAPI.authenticateAsync()', () => {
+	const sut = new MyAdminAPI(constructorProperties)
+	it('is a function', () => {
+		expect(typeof sut.authenticateAsync).toBe('function')
+	})
+	it.skip('returns an object and sets the credentials', async () => {
+		const authenticatedSUT = await sut.authenticateAsync()
+		expect(typeof authenticatedSUT).toBe('object')
+		expect(sut.credentials).toEqual({})
 	})
 })
