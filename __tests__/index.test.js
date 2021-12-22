@@ -15,7 +15,7 @@ describe('MyAdminAPI constructor', () => {
 		}
 	}
 	it('requires an object', () => {
-		expect(instantiateClass()).toThrow('Cannot read property')
+		expect(instantiateClass()).toThrow('Cannot')
 		expect(instantiateClass({})).toThrow('Must supply')
 	})
 	it('requires an apiKey', () => {
@@ -76,6 +76,11 @@ describe('MyAdminAPI.authenticateAsync()', () => {
 	it('returns an object and sets the credentials', async () => {
 		const authenticatedSUT = await sut.authenticateAsync()
 		expect(typeof authenticatedSUT).toBe('object')
-		expect(sut.credentials).toEqual({})
+		expect(sut.credentials).not.toEqual({
+			...constructorProperties,
+			username: process.env.GEOTAB_USERNAME,
+			password: process.env.GEOTAB_PASSWORD
+		})
+		expect(sut.credentials.apiKey).not.toEqual('an apiKey')
 	})
 })

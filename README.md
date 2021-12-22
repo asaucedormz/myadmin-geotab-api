@@ -3,6 +3,10 @@
 Unofficial nodejs client for myadmin.geotab.com
 https://myadmin.geotab.com/sdk#/api-reference
 
+## A note on tests
+
+These are run on node v14, and should also work up to v15. You may run into breaking changes in the test on v17 and above or 14 and below
+
 ### Installation
 
 Using npm:
