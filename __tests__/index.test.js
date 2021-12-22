@@ -7,14 +7,37 @@ const server = setupServer(
 		return res(
 			ctx.status(200), 
 			ctx.json({
-				apiKey: 'an apiKey',
-				password: 'a password',
-				sessionId: 'a sessionId',
-				username: 'a username'
+				result: {
+					accounts: [
+					  {
+					    accountId: 'ACCOUNT01',
+					    currency: {
+					      code: 'CAD',
+					      name: 'Canadian Dollars',
+					    },
+					  },
+					  {
+					  accountId: 'ACCOUNT02',
+					  currency: {
+					    code: 'USD',
+					    name: 'US Dollars',
+					    },
+					  },
+					],
+					name: 'a name',
+					roles: [
+					  {
+					    comments: 'a comment',
+					    name: 'a role name',
+					  },
+					],
+					sessionId: 'a session Id',
+					userId: 'a userId',
+				}
 			})
 		)
 	})
-	)
+)
 
 beforeAll(() => {
 	server.listen()
@@ -24,9 +47,9 @@ afterAll(() => {
 	server.close()
 })
 
-// afterEach(() => {
-// 	server.resetHandlers()
-// })
+afterEach(() => {
+	server.resetHandlers()
+})
 
 const constructorProperties = {
 	apiKey: 'an apiKey',

@@ -33,10 +33,10 @@ class MyAdminAPI {
       username: this.credentials.username,
       password: this.credentials.password,
     };
-    const result = await this.post('Authenticate', params);
-    this.credentials.apiKey = result.userId;
-    this.credentials.sessionId = result.sessionId;
-    return result;
+    const response = await this.post('Authenticate', params);
+    this.credentials.apiKey = response.userId;
+    this.credentials.sessionId = response.sessionId;
+    return response;
   }
   async callAsync(method, params) {
     if (!method) {
@@ -46,13 +46,13 @@ class MyAdminAPI {
       params = {};
     }
 
-    const result = await this.post(method, {
+    const response = await this.post(method, {
       ...params,
       apiKey: this.credentials.apiKey,
       sessionId: this.credentials.sessionId,
     });
 
-    return result;
+    return response;
   }
   async post(method, params) {
     const body = JSON.stringify({
