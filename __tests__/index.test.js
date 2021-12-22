@@ -1,4 +1,32 @@
 const MyAdminAPI = require('../index')
+const rest = require('msw').rest
+const setupServer = require('msw/node').setupServer
+
+const server = setupServer(
+	rest.post('https://myadminapitest.geotab.com/v2/MyAdminApi.ashx', (req, res, ctx) => {
+		return res(
+			ctx.status(200), 
+			ctx.json({
+				apiKey: 'an apiKey',
+				password: 'a password',
+				sessionId: 'a sessionId',
+				username: 'a username'
+			})
+		)
+	})
+	)
+
+beforeAll(() => {
+	server.listen()
+})
+
+afterAll(() => {
+	server.close()
+})
+
+// afterEach(() => {
+// 	server.resetHandlers()
+// })
 
 const constructorProperties = {
 	apiKey: 'an apiKey',

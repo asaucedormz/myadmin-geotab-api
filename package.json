@@ -14,7 +14,8 @@
   "homepage": "https://github.com/asaucedormz/myadmin-geotab-api#readme",
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "jest": "^27.4.5"
+    "jest": "^27.4.5",
+    "msw": "^0.36.3"
   },
   "scripts": {
     "test": "jest --coverage --setupFiles dotenv/config"
