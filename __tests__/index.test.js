@@ -64,12 +64,16 @@ describe('MyAdminAPI constructor', () => {
 	})
 })
 
-describe.only('MyAdminAPI.authenticateAsync()', () => {
-	const sut = new MyAdminAPI(constructorProperties)
+describe('MyAdminAPI.authenticateAsync()', () => {
+	const sut = new MyAdminAPI({
+		...constructorProperties,
+		username: process.env.GEOTAB_USERNAME,
+		password: process.env.GEOTAB_PASSWORD
+	})
 	it('is a function', () => {
 		expect(typeof sut.authenticateAsync).toBe('function')
 	})
-	it.skip('returns an object and sets the credentials', async () => {
+	it('returns an object and sets the credentials', async () => {
 		const authenticatedSUT = await sut.authenticateAsync()
 		expect(typeof authenticatedSUT).toBe('object')
 		expect(sut.credentials).toEqual({})
