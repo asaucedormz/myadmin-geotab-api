@@ -4,38 +4,29 @@ const setupServer = require('msw/node').setupServer
 
 const server = setupServer(
 	rest.post('https://myadminapitest.geotab.com/v2/MyAdminApi.ashx', (req, res, ctx) => {
-		return res(
-			ctx.status(200), 
-			ctx.json({
-				result: {
-					accounts: [
-					  {
-					    accountId: 'ACCOUNT01',
-					    currency: {
-					      code: 'CAD',
-					      name: 'Canadian Dollars',
-					    },
-					  },
-					  {
-					  accountId: 'ACCOUNT02',
-					  currency: {
-					    code: 'USD',
-					    name: 'US Dollars',
-					    },
-					  },
-					],
-					name: 'a name',
-					roles: [
-					  {
-					    comments: 'a comment',
-					    name: 'a role name',
-					  },
-					],
-					sessionId: 'a session Id',
-					userId: 'a userId',
-				}
-			})
-		)
+		switch(req.body.method) {
+			case 'GetCountries': {
+				return res(
+					ctx.status(200),
+					ctx.json({
+						result: ['Canada', 'Philippines', 'United States']
+					})
+				)
+			}
+			break
+			default: {
+				return res(
+					ctx.status(200), 
+					ctx.json({
+						result: {
+							among_other_things: 'this result contains sessionId and userId, below',
+							sessionId: 'a session Id',
+							userId: 'a userId',
+						}
+					})
+				)		
+			}
+		}
 	})
 )
 
@@ -146,5 +137,9 @@ describe('MyAdminAPI.callAsync()', () => {
 	it('throws error when not provided a method name', async () => {
 		await sut.authenticateAsync()
 		expect(sut.callAsync(null, null)).rejects.toThrow('Must provide method.')
+	})
+	it('fetches "GetCountries" (a supported method without params)', async () => {
+		await sut.authenticateAsync()
+		expect(await sut.callAsync('GetCountries', null)).toEqual(expect.arrayContaining(['Canada', 'United States']))
 	})
 })
