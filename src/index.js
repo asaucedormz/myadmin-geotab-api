@@ -8,14 +8,8 @@ class MyAdminAPI {
     uri = null,
     username = null,
   }) {
-		if (!apiKey) {
-			throw new Error('Must supply apiKey.')
-		}
 		if (!password) {
 			throw new Error('Must supply password.')
-		}
-		if (!sessionId) {
-		  throw new Error('Must supply sessionId.')
 		}
     if (!username) {
       throw new Error('Must supply username.')
@@ -39,6 +33,9 @@ class MyAdminAPI {
     return response
   }
   async call(method, params = {}) {
+		if (this.credentials.apiKey === null && this.credentials.sessionId === null) {
+			throw new Error('Must authenticate() before using call().')
+		}
     if (!method) {
       throw new Error('Must provide method.')
     }
@@ -71,9 +68,6 @@ class MyAdminAPI {
     }
     return data.result
   }
-	// these methods were renamed and retained here
-	// for backwards compatibility.
-	// recommend remove in future version.
 	async authenticateAsync() {
 		return await this.authenticate();
   }

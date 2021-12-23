@@ -1,19 +1,21 @@
 const MyAdminAPI = require('../src/index')
 const server = require('./utils/mock-server')
 
-const constructorProperties = {
-  apiKey: 'an apiKey',
-  password: 'a password',
-  sessionId: 'a sessionId',
-  uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx',
-  username: 'a username'
+const constructorProperties = () => {
+	return {
+		password: 'a password',
+		uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx',
+		username: 'a username'
+	}
 }
 
-const sut = new MyAdminAPI({
-  ...constructorProperties,
-  username: process.env.GEOTAB_USERNAME,
-  password: process.env.GEOTAB_PASSWORD
-})
+const instantiateSUT = () => {
+	return new MyAdminAPI({
+		...constructorProperties(),
+		username: process.env.GEOTAB_USERNAME,
+		password: process.env.GEOTAB_PASSWORD
+	})
+}
 
 beforeAll(() => {
   server.listen()
@@ -37,71 +39,70 @@ describe('MyAdminAPI constructor', () => {
     expect(instantiateClass()).toThrow('Cannot')
     expect(instantiateClass({})).toThrow('Must supply')
   })
-  it('requires an apiKey', () => {
-    expect(instantiateClass({
-      ...constructorProperties,
-      apiKey: null,
-    })).toThrow('Must supply apiKey.')
-  })
   it('requires a password', () => {
     expect(instantiateClass({
-      ...constructorProperties,
+      ...constructorProperties(),
       password: null,
     })).toThrow('Must supply password.')
   })
-  it('requires a sessionId', () => {
-    expect(instantiateClass({
-      ...constructorProperties,
-      sessionId: null,
-    })).toThrow('Must supply sessionId.')
-  })
   it('requires a username', () => {
     expect(instantiateClass({
-      ...constructorProperties,
+      ...constructorProperties(),
       username: null
     })).toThrow('Must supply username.')
   })
   it('uses production url by default', () => {
     expect(new MyAdminAPI({
-      ...constructorProperties,
+      ...constructorProperties(),
       uri: null
     }).serverUrl).toEqual('https://myadminapi.geotab.com/v2/MyAdminApi.ashx')
   })
   it('uses given url', () => {
     expect(new MyAdminAPI({
-      ...constructorProperties,
+      ...constructorProperties(),
       uri: `any url`
     }).serverUrl).toEqual('any url')
   })
   it('uses given credentials', () => {
-    expect(new MyAdminAPI(constructorProperties).credentials).toEqual({
-      apiKey: 'an apiKey',
+    expect(new MyAdminAPI(constructorProperties()).credentials).toEqual({
+			apiKey: null,
       password: 'a password',
-      sessionId: 'a sessionId',
+			sessionId: null,
       username: 'a username'
     })
   })
 })
 
+let sut
+
 describe('MyAdminAPI.authenticate()', () => {
- it('is a function', () => {
+	beforeEach(() => {
+		sut = instantiateSUT()
+	})	
+	it('is a function', () => {
     expect(typeof sut.authenticate).toBe('function')
   })
   it('returns an object and sets the credentials', async () => {
     const authenticatedSUT = await sut.authenticate()
     expect(typeof authenticatedSUT).toBe('object')
     expect(sut.credentials).not.toEqual({
-      ...constructorProperties,
+      ...constructorProperties(),
       username: process.env.GEOTAB_USERNAME,
       password: process.env.GEOTAB_PASSWORD
     })
-    expect(sut.credentials.apiKey).not.toEqual('an apiKey')
-    expect(sut.credentials.sessionId).not.toEqual('a session id')
+    expect(sut.credentials.apiKey).not.toEqual(null)
+    expect(sut.credentials.sessionId).not.toEqual(null)
   })
   it.skip('fails', () => {})
 })
 
 describe('MyAdminAPI.call()', () => {
+	beforeEach(() => {
+		sut = instantiateSUT()
+	})
+  it('throws error if not authenticated', async () => {
+    expect(sut.call(null, null)).rejects.toThrow('Must authenticate() before using call().')
+  })
   it('throws error when not provided a method name', async () => {
     await sut.authenticate()
     expect(sut.call(null, null)).rejects.toThrow('Must provide method.')
@@ -122,6 +123,9 @@ describe('MyAdminAPI.call()', () => {
 })
 
 describe('MyAdminAPI.post(), can also be called directly (with credentials)', () => {
+	beforeEach(() => {
+		sut = instantiateSUT()
+	})
   it('returns error message if missing method name (does not throw)', async () => {
     await sut.authenticate()
     const result = await sut.post('', {
@@ -144,6 +148,7 @@ describe('MyAdminAPI.post(), can also be called directly (with credentials)', ()
 })
 
 describe('MyAdminAPI still supports old method names', () => {
+	sut = instantiateSUT()
   it('authenticateAsync() is still a usable function name', () => {
     expect(typeof sut.authenticateAsync).toBe('function')
   })
