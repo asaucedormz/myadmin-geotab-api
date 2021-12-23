@@ -3,15 +3,28 @@ const rest = require('msw').rest
 const setupServer = require('msw/node').setupServer
 
 const server = setupServer(
+	// calls that do not require parameter inputs
 	rest.post(process.env.GEOTAB_SANDBOX_URL, (req, res, ctx) => {
 		switch(req.body.method) {
 			case 'GetCountries': {
 				return res(
 					ctx.status(200),
-					ctx.json({ result: ['Canada', 'Philippines', 'United States'] })
+					ctx.json({
+						result: ['Canada', 'Philippines', 'United States']
+						})
 					)
+				
 				}
-			break
+				break
+			case 'GetDevicePlans': {
+				const forAccount = req.body.params.forAccount
+				return res(
+					ctx.status(200),
+					ctx.json({
+						result: ['an id', 'a level', true]
+					})
+				)
+			}
 			case '': {
 				return res(
 				ctx.status(500),
@@ -25,7 +38,8 @@ const server = setupServer(
 				})
 				)
 			}
-			break
+				break
+			// return a default so our tests don't error out
 			default: {
 				return res(
 					ctx.status(200), 
@@ -40,6 +54,7 @@ const server = setupServer(
 			}
 		}
 	})
+	// call for request
 )
 
 module.exports = server
