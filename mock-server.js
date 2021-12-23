@@ -15,12 +15,11 @@ const server = setupServer(
 					)
 				
 				}
-			case 'GetDevicePlans': {
-				const forAccount = req.body.params.forAccount
+			case 'GetStates': {
 				return res(
 					ctx.status(200),
 					ctx.json({
-						result: ['an id', 'a level', true]
+						result: ['Alberta','any other province','British Columbia']
 					})
 				)
 			}
