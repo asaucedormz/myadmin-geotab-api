@@ -1,7 +1,6 @@
 const MyAdminAPI = require('../index')
 const server = require('../server-for-tests')
 
-
 const constructorProperties = {
 	apiKey: 'an apiKey',
 	password: 'a password',
@@ -130,10 +129,6 @@ describe('MyAdminAPI.call()', () => {
 
 describe('MyAdminAPI.post(), can also be called directly (with credentials)', () => {
 	it('returns error message if missing method name (does not throw)', async () => {
-		// this page https://mswjs.io/docs/recipes/mocking-error-responses
-		// recommends by treating an error response as an actual response, 
-		// and not an exception, you respect the standard and ensure your 
-		// client code receives and handles a valid error response.
 		await sut.authenticate()
 		const result = await sut.post('', {
 			params: null,
