@@ -1,6 +1,20 @@
 const MyAdminAPI = require('../index')
 const server = require('../server-for-tests')
 
+const constructorProperties = {
+	apiKey: 'an apiKey',
+	password: 'a password',
+	sessionId: 'a sessionId',
+	uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx',
+	username: 'a username'
+}
+
+const sut = new MyAdminAPI({
+	...constructorProperties,
+	username: process.env.GEOTAB_USERNAME,
+	password: process.env.GEOTAB_PASSWORD
+})
+
 beforeAll(() => {
 	server.listen()
 })
@@ -12,14 +26,6 @@ afterAll(() => {
 afterEach(() => {
 	server.resetHandlers()
 })
-
-const constructorProperties = {
-	apiKey: 'an apiKey',
-	password: 'a password',
-	sessionId: 'a sessionId',
-	uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx',
-	username: 'a username'
-}
 
 describe('MyAdminAPI constructor', () => {
 	const instantiateClass = (obj) => {
@@ -78,11 +84,6 @@ describe('MyAdminAPI constructor', () => {
 })
 
 describe('MyAdminAPI.authenticate()', () => {
-	const sut = new MyAdminAPI({
-		...constructorProperties,
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
-	})
 	it('is a function', () => {
 		expect(typeof sut.authenticate).toBe('function')
 	})
@@ -101,11 +102,6 @@ describe('MyAdminAPI.authenticate()', () => {
 })
 
 describe('MyAdminAPI.call()', () => {
-	const sut = new MyAdminAPI({
-		...constructorProperties,
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
-	})
 	it('throws error when not provided a method name', async () => {
 		await sut.authenticateAsync()
 		expect(sut.call(null, null)).rejects.toThrow('Must provide method.')
@@ -119,11 +115,6 @@ describe('MyAdminAPI.call()', () => {
 })
 
 describe('MyAdminAPI.post(), can also be called directly (with credentials)', () => {
-	const sut = new MyAdminAPI({
-		...constructorProperties,
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
-	})
 	it('returns error message if missing method name (does not throw)', async () => {
 		// this page https://mswjs.io/docs/recipes/mocking-error-responses
 		// recommends by treating an error response as an actual response, 
@@ -150,11 +141,6 @@ describe('MyAdminAPI.post(), can also be called directly (with credentials)', ()
 })
 
 describe('MyAdminAPI still supports old method names', () => {
-	const sut = new MyAdminAPI({
-		...constructorProperties,
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
-	})
 	it('authenticateAsync() is still a usable function name', () => {
 		expect(typeof sut.authenticateAsync).toBe('function')
 	})
