@@ -38,20 +38,15 @@ class MyAdminAPI {
     this.credentials.sessionId = response.sessionId;
     return response;
   }
-  async callAsync(method, params) {
+  async callAsync(method, params = {}) {
     if (!method) {
-      throw new Error('Must provide method');
+      throw new Error('Must provide method.');
     }
-    if (!params) {
-      params = {};
-    }
-
     const response = await this.post(method, {
       ...params,
       apiKey: this.credentials.apiKey,
       sessionId: this.credentials.sessionId,
     });
-
     return response;
   }
   async post(method, params) {

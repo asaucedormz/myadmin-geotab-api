@@ -39,17 +39,17 @@ const server = setupServer(
 	})
 )
 
-// beforeAll(() => {
-// 	server.listen()
-// })
+beforeAll(() => {
+	server.listen()
+})
 
-// afterAll(() => {
-// 	server.close()
-// })
+afterAll(() => {
+	server.close()
+})
 
-// afterEach(() => {
-// 	server.resetHandlers()
-// })
+afterEach(() => {
+	server.resetHandlers()
+})
 
 const constructorProperties = {
 	apiKey: 'an apiKey',
@@ -137,20 +137,14 @@ describe('MyAdminAPI.authenticateAsync()', () => {
 	})
 })
 
-describe.skip('MyAdminAPI.callAsync()', () => {
+describe('MyAdminAPI.callAsync()', () => {
 	const sut = new MyAdminAPI({
 		...constructorProperties,
 		username: process.env.GEOTAB_USERNAME,
 		password: process.env.GEOTAB_PASSWORD
 	})
-	it('returns a method', async () => {
-		const sutWrapper = async () => {
-			return async () => {
-				return await sut.callAsync()
-			}
-		}
-		const authenticaatedSUT = await sut.authenticateAsync()
-		expect(await sutWrapper()).toThrow('Must provide method')
+	it('throws error when not provided a method name', async () => {
+		await sut.authenticateAsync()
+		expect(sut.callAsync(null, null)).rejects.toThrow('Must provide method.')
 	})
-
 })
