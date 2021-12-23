@@ -15,17 +15,17 @@ const sut = new MyAdminAPI({
 	password: process.env.GEOTAB_PASSWORD
 })
 
-beforeAll(() => {
-	server.listen()
-})
+// beforeAll(() => {
+// 	server.listen()
+// })
 
-afterAll(() => {
-	server.close()
-})
+// afterAll(() => {
+// 	server.close()
+// })
 
-afterEach(() => {
-	server.resetHandlers()
-})
+// afterEach(() => {
+// 	server.resetHandlers()
+// })
 
 describe('MyAdminAPI constructor', () => {
 	const instantiateClass = (obj) => {
@@ -112,7 +112,7 @@ describe('MyAdminAPI.call()', () => {
 			expect.arrayContaining(['Canada', 'United States'])
 			)
 	})
-	it('fetches "GetDevicePlans" (a supported method with params)', async () => {
+	it.only('fetches "GetDevicePlans" (a supported method with params)', async () => {
 		const devicePlanParams = {
 			forAccount: "fake-account-id-1234"
 		}
