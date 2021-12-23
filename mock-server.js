@@ -15,7 +15,6 @@ const server = setupServer(
 					)
 				
 				}
-				break
 			case 'GetDevicePlans': {
 				const forAccount = req.body.params.forAccount
 				return res(
@@ -38,7 +37,6 @@ const server = setupServer(
 				})
 				)
 			}
-				break
 			// return a default so our tests don't error out
 			default: {
 				return res(
