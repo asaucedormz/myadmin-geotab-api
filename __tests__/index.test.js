@@ -1,7 +1,6 @@
 const MyAdminAPI = require('../index')
 const server = require('../server-for-tests')
 
-
 beforeAll(() => {
 	server.listen()
 })
@@ -101,48 +100,6 @@ describe('MyAdminAPI.authenticate()', () => {
 	it.skip('fails', () => {})
 })
 
-describe('MyAdminAPI.authenticateAsync()', () => {
-	// this duplicates tests for .authenticate()
-	// recommend remove in future version
-	const sut = new MyAdminAPI({
-		...constructorProperties,
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
-	})
-	it('is a function', () => {
-		expect(typeof sut.authenticateAsync).toBe('function')
-	})
-	it('returns an object and sets the credentials', async () => {
-		const authenticatedSUT = await sut.authenticateAsync()
-		expect(typeof authenticatedSUT).toBe('object')
-		expect(sut.credentials).not.toEqual({
-			...constructorProperties,
-			username: process.env.GEOTAB_USERNAME,
-			password: process.env.GEOTAB_PASSWORD
-		})
-		expect(sut.credentials.apiKey).not.toEqual('an apiKey')
-		expect(sut.credentials.sessionId).not.toEqual('a session id')
-	})
-})
-
-describe('MyAdminAPI.callAsync()', () => {
-	// this duplicates tests for .call()
-	// recommend remove in future version
-	const sut = new MyAdminAPI({
-		...constructorProperties,
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
-	})
-	it('throws error when not provided a method name', async () => {
-		await sut.authenticateAsync()
-		expect(sut.callAsync(null, null)).rejects.toThrow('Must provide method.')
-	})
-	it('fetches "GetCountries" (a supported method without params)', async () => {
-		await sut.authenticateAsync()
-		expect(await sut.callAsync('GetCountries', null)).toEqual(expect.arrayContaining(['Canada', 'United States']))
-	})
-})
-
 describe('MyAdminAPI.call()', () => {
 	const sut = new MyAdminAPI({
 		...constructorProperties,
@@ -189,5 +146,19 @@ describe('MyAdminAPI.post(), can also be called directly (with credentials)', ()
       apiKey: sut.credentials.apiKey,
       sessionId: sut.credentials.sessionId,
     })).toEqual(expect.arrayContaining(['Canada', 'United States']))
+	})
+})
+
+describe('MyAdminAPI still supports old method names', () => {
+	const sut = new MyAdminAPI({
+		...constructorProperties,
+		username: process.env.GEOTAB_USERNAME,
+		password: process.env.GEOTAB_PASSWORD
+	})
+	it('authenticateAsync() is still a usable function name', () => {
+		expect(typeof sut.authenticateAsync).toBe('function')
+	})
+	it('callAsync() is still a usable function name', () => {
+		expect(typeof sut.callAsync).toBe('function')
 	})
 })
