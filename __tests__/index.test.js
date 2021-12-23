@@ -8,9 +8,21 @@ const server = setupServer(
 			case 'GetCountries': {
 				return res(
 					ctx.status(200),
-					ctx.json({
-						result: ['Canada', 'Philippines', 'United States']
-					})
+					ctx.json({ result: ['Canada', 'Philippines', 'United States'] })
+					)
+				}
+			break
+			case '': {
+				return res(
+				ctx.status(500),
+				ctx.json({
+					result: {
+						error: {
+							message: 'An error has occurred and this string contains info.',
+							name: 'MissingMethodException'
+						}
+					}
+				})
 				)
 			}
 			break
@@ -126,6 +138,7 @@ describe('MyAdminAPI.authenticateAsync()', () => {
 		expect(sut.credentials.apiKey).not.toEqual('an apiKey')
 		expect(sut.credentials.sessionId).not.toEqual('a session id')
 	})
+	it.skip('fails', () => {})
 })
 
 describe('MyAdminAPI.callAsync()', () => {
@@ -141,5 +154,38 @@ describe('MyAdminAPI.callAsync()', () => {
 	it('fetches "GetCountries" (a supported method without params)', async () => {
 		await sut.authenticateAsync()
 		expect(await sut.callAsync('GetCountries', null)).toEqual(expect.arrayContaining(['Canada', 'United States']))
+	})
+	it.skip('fetches "a method" (a supported method with params)', () => {})
+	it.skip('fails', () => {})
+})
+
+describe('MyAdminAPI.post(), can also be called directly (with credentials)', () => {
+	const sut = new MyAdminAPI({
+		...constructorProperties,
+		username: process.env.GEOTAB_USERNAME,
+		password: process.env.GEOTAB_PASSWORD
+	})
+	it('returns error message if missing method name (does not throw)', async () => {
+		// this page https://mswjs.io/docs/recipes/mocking-error-responses
+		// recommends by treating an error response as an actual response, 
+		// and not an exception, you respect the standard and ensure your 
+		// client code receives and handles a valid error response.
+		await sut.authenticateAsync()
+		const result = await sut.post('', {
+      params: null,
+      apiKey: sut.credentials.apiKey,
+      sessionId: sut.credentials.sessionId,
+    })
+		expect(result.error.code).toBeUndefined()
+		expect(result.error.name).toEqual('MissingMethodException')
+		expect(result.error.message.indexOf('An error has occurred')).not.toEqual(-1)
+	})
+	it('fetches "GetCountries" (a supported method without params)', async () => {
+		await sut.authenticateAsync()
+		expect(await sut.post('GetCountries', {
+      params: null,
+      apiKey: sut.credentials.apiKey,
+      sessionId: sut.credentials.sessionId,
+    })).toEqual(expect.arrayContaining(['Canada', 'United States']))
 	})
 })

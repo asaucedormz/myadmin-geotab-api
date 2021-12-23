@@ -60,12 +60,14 @@ class MyAdminAPI {
       body,
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => res.json());
-
-    if (data.error && data.error.errors) {
-      const error = new Error(data.error.message);
-      error.name = data.error.errors[0].name;
-      error.code = data.error.code;
-      throw error;
+    if (data.error) {
+			return {
+				error: {
+					code: data.error.code,
+					message: data.error.message,
+					name: data.error.errors[0].name
+				}
+			};
     }
     return data.result;
   }
