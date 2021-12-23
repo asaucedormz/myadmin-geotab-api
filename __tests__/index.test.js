@@ -1,6 +1,7 @@
 const MyAdminAPI = require('../index')
 const server = require('../server-for-tests')
 
+
 const constructorProperties = {
 	apiKey: 'an apiKey',
 	password: 'a password',
@@ -103,11 +104,11 @@ describe('MyAdminAPI.authenticate()', () => {
 
 describe('MyAdminAPI.call()', () => {
 	it('throws error when not provided a method name', async () => {
-		await sut.authenticateAsync()
+		await sut.authenticate()
 		expect(sut.call(null, null)).rejects.toThrow('Must provide method.')
 	})
 	it('fetches "GetCountries" (a supported method without params)', async () => {
-		await sut.authenticateAsync()
+		await sut.authenticate()
 		expect(await sut.call('GetCountries', null)).toEqual(expect.arrayContaining(['Canada', 'United States']))
 	})
 	it.skip('fetches "a method" (a supported method with params)', () => {})
@@ -120,7 +121,7 @@ describe('MyAdminAPI.post(), can also be called directly (with credentials)', ()
 		// recommends by treating an error response as an actual response, 
 		// and not an exception, you respect the standard and ensure your 
 		// client code receives and handles a valid error response.
-		await sut.authenticateAsync()
+		await sut.authenticate()
 		const result = await sut.post('', {
 			params: null,
 			apiKey: sut.credentials.apiKey,
@@ -131,7 +132,7 @@ describe('MyAdminAPI.post(), can also be called directly (with credentials)', ()
 		expect(result.error.message.indexOf('An error has occurred')).not.toEqual(-1)
 	})
 	it('fetches "GetCountries" (a supported method without params)', async () => {
-		await sut.authenticateAsync()
+		await sut.authenticate()
 		expect(await sut.post('GetCountries', {
       params: null,
       apiKey: sut.credentials.apiKey,
