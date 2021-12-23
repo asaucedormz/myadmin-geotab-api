@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = require('node-fetch')
 
 class MyAdminAPI {
   constructor({
@@ -9,57 +9,57 @@ class MyAdminAPI {
     username = null,
   }) {
 		if (!apiKey) {
-			throw new Error('Must supply apiKey.');
+			throw new Error('Must supply apiKey.')
 		}
 		if (!password) {
-			throw new Error('Must supply password.');
+			throw new Error('Must supply password.')
 		}
 		if (!sessionId) {
-		  throw new Error('Must supply sessionId.');
+		  throw new Error('Must supply sessionId.')
 		}
     if (!username) {
-      throw new Error('Must supply username.');
+      throw new Error('Must supply username.')
     }
-    this.serverUrl = uri || 'https://myadminapi.geotab.com/v2/MyAdminApi.ashx';
+    this.serverUrl = uri || 'https://myadminapi.geotab.com/v2/MyAdminApi.ashx'
     this.credentials = {
       apiKey,
       password,
       username,
       sessionId,
-    };
+    }
   }
   async authenticate() {
     const params = {
       username: this.credentials.username,
       password: this.credentials.password,
-    };
-    const response = await this.post('Authenticate', params);
-    this.credentials.apiKey = response.userId;
-    this.credentials.sessionId = response.sessionId;
-    return response;
+    }
+    const response = await this.post('Authenticate', params)
+    this.credentials.apiKey = response.userId
+    this.credentials.sessionId = response.sessionId
+    return response
   }
   async call(method, params = {}) {
     if (!method) {
-      throw new Error('Must provide method.');
+      throw new Error('Must provide method.')
     }
     const response = await this.post(method, {
       ...params,
       apiKey: this.credentials.apiKey,
       sessionId: this.credentials.sessionId,
-    });
-    return response;
+    })
+    return response
   }
   async post(method, params) {
     const body = JSON.stringify({
       id: -1,
       method,
       params,
-    });
+    })
     const data = await fetch(this.serverUrl, {
       method: 'POST',
       body,
       headers: { 'Content-Type': 'application/json' },
-    }).then((res) => res.json());
+    }).then((res) => res.json())
     if (data.error) {
 			return {
 				error: {
@@ -67,9 +67,9 @@ class MyAdminAPI {
 					message: data.error.message,
 					name: data.error.errors[0].name
 				}
-			};
+			}
     }
-    return data.result;
+    return data.result
   }
 	// these methods were renamed and retained here
 	// for backwards compatibility.
@@ -82,4 +82,4 @@ class MyAdminAPI {
 	}
 }
 
-module.exports = MyAdminAPI;
+module.exports = MyAdminAPI
