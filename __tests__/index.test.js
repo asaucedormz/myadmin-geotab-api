@@ -118,7 +118,32 @@ describe('MyAdminAPI constructor', () => {
 	})
 })
 
+describe('MyAdminAPI.authenticate()', () => {
+	const sut = new MyAdminAPI({
+		...constructorProperties,
+		username: process.env.GEOTAB_USERNAME,
+		password: process.env.GEOTAB_PASSWORD
+	})
+	it('is a function', () => {
+		expect(typeof sut.authenticate).toBe('function')
+	})
+	it('returns an object and sets the credentials', async () => {
+		const authenticatedSUT = await sut.authenticate()
+		expect(typeof authenticatedSUT).toBe('object')
+		expect(sut.credentials).not.toEqual({
+			...constructorProperties,
+			username: process.env.GEOTAB_USERNAME,
+			password: process.env.GEOTAB_PASSWORD
+		})
+		expect(sut.credentials.apiKey).not.toEqual('an apiKey')
+		expect(sut.credentials.sessionId).not.toEqual('a session id')
+	})
+	it.skip('fails', () => {})
+})
+
 describe('MyAdminAPI.authenticateAsync()', () => {
+	// this duplicates tests for .authenticate()
+	// recommend remove in future version
 	const sut = new MyAdminAPI({
 		...constructorProperties,
 		username: process.env.GEOTAB_USERNAME,
@@ -138,10 +163,11 @@ describe('MyAdminAPI.authenticateAsync()', () => {
 		expect(sut.credentials.apiKey).not.toEqual('an apiKey')
 		expect(sut.credentials.sessionId).not.toEqual('a session id')
 	})
-	it.skip('fails', () => {})
 })
 
 describe('MyAdminAPI.callAsync()', () => {
+	// this duplicates tests for .call()
+	// recommend remove in future version
 	const sut = new MyAdminAPI({
 		...constructorProperties,
 		username: process.env.GEOTAB_USERNAME,
@@ -154,6 +180,22 @@ describe('MyAdminAPI.callAsync()', () => {
 	it('fetches "GetCountries" (a supported method without params)', async () => {
 		await sut.authenticateAsync()
 		expect(await sut.callAsync('GetCountries', null)).toEqual(expect.arrayContaining(['Canada', 'United States']))
+	})
+})
+
+describe('MyAdminAPI.call()', () => {
+	const sut = new MyAdminAPI({
+		...constructorProperties,
+		username: process.env.GEOTAB_USERNAME,
+		password: process.env.GEOTAB_PASSWORD
+	})
+	it('throws error when not provided a method name', async () => {
+		await sut.authenticateAsync()
+		expect(sut.call(null, null)).rejects.toThrow('Must provide method.')
+	})
+	it('fetches "GetCountries" (a supported method without params)', async () => {
+		await sut.authenticateAsync()
+		expect(await sut.call('GetCountries', null)).toEqual(expect.arrayContaining(['Canada', 'United States']))
 	})
 	it.skip('fetches "a method" (a supported method with params)', () => {})
 	it.skip('fails', () => {})

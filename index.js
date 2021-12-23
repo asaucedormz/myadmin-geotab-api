@@ -28,7 +28,7 @@ class MyAdminAPI {
       sessionId,
     };
   }
-  async authenticateAsync() {
+  async authenticate() {
     const params = {
       username: this.credentials.username,
       password: this.credentials.password,
@@ -38,7 +38,7 @@ class MyAdminAPI {
     this.credentials.sessionId = response.sessionId;
     return response;
   }
-  async callAsync(method, params = {}) {
+  async call(method, params = {}) {
     if (!method) {
       throw new Error('Must provide method.');
     }
@@ -71,6 +71,15 @@ class MyAdminAPI {
     }
     return data.result;
   }
+	// these methods were renamed and retained here
+	// for backwards compatibility.
+	// recommend remove in future version.
+	async authenticateAsync() {
+		return await this.authenticate();
+  }
+	async callAsync(method, params = {}) {
+		return await this.call(method, params);
+	}
 }
 
 module.exports = MyAdminAPI;
