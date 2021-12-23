@@ -19,5 +19,8 @@
   },
   "scripts": {
     "test": "jest --coverage --setupFiles dotenv/config"
-  }
+  },
+	"jest": {
+		"testPathIgnorePatterns": ["mock-server.js"]
+	}
 }

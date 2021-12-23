@@ -1,5 +1,5 @@
-const MyAdminAPI = require('../index')
-const server = require('../mock-server')
+const MyAdminAPI = require('../src/index')
+const server = require('./utils/mock-server')
 
 const constructorProperties = {
   apiKey: 'an apiKey',
