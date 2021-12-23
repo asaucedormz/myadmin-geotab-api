@@ -172,9 +172,9 @@ describe('MyAdminAPI.post(), can also be called directly (with credentials)', ()
 		// client code receives and handles a valid error response.
 		await sut.authenticateAsync()
 		const result = await sut.post('', {
-      params: null,
-      apiKey: sut.credentials.apiKey,
-      sessionId: sut.credentials.sessionId,
+			params: null,
+			apiKey: sut.credentials.apiKey,
+			sessionId: sut.credentials.sessionId,
     })
 		expect(result.error.code).toBeUndefined()
 		expect(result.error.name).toEqual('MissingMethodException')
