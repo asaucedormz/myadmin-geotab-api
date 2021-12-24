@@ -1,4 +1,4 @@
-const MyAdminAPI = require('../src/index')
+const MyAdminAPI = require('../src/index.js')
 const server = require('./utils/mock-server')
 
 const constructorProperties = () => {
