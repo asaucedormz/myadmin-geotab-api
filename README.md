@@ -20,6 +20,9 @@ In Node.js:
 The order of operations is:
 
 1. Require `myadmin-geotab-api` in your code.
+	```js
+	const MyAdminAPI = require('myadmin-geotab-api')
+	```
 
 2. Create an instance of the class object:
 	```js
