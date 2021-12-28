@@ -12,8 +12,8 @@ const constructorProperties = () => {
 const instantiateSUT = () => {
 	return new MyAdminAPI({
 		...constructorProperties(),
-		username: process.env.GEOTAB_USERNAME,
-		password: process.env.GEOTAB_PASSWORD
+		username: 'any username',
+		password: 'any password'
 	})
 }
 
@@ -87,8 +87,8 @@ describe('MyAdminAPI.authenticate()', () => {
     expect(typeof authenticatedSUT).toBe('object')
     expect(sut.credentials).not.toEqual({
       ...constructorProperties(),
-      username: process.env.GEOTAB_USERNAME,
-      password: process.env.GEOTAB_PASSWORD
+      username: 'any username',
+      password: 'any password'
     })
     expect(sut.credentials.apiKey).not.toEqual(null)
     expect(sut.credentials.sessionId).not.toEqual(null)

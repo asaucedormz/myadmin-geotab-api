@@ -4,7 +4,7 @@ const setupServer = require('msw/node').setupServer
 
 const server = setupServer(
   // calls that do not require parameter inputs
-  rest.post(process.env.GEOTAB_SANDBOX_URL, (req, res, ctx) => {
+  rest.post('https://myadminapitest.geotab.com/v2/MyAdminApi.ashx', (req, res, ctx) => {
     switch(req.body.method) {
       case 'GetCountries': {
         return res(
@@ -13,7 +13,6 @@ const server = setupServer(
             result: ['Canada', 'Philippines', 'United States']
             })
           )
-        
         }
       case 'GetStates': {
         return res(
