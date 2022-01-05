@@ -1,7 +1,6 @@
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
-
 const server = setupServer(
 	rest.post('https://myadminapitest.geotab.com/v2/MyAdminApi.ashx', (req, res, ctx) => {
 		switch(JSON.parse(decodeURIComponent(req.body.substring(9))).method) {

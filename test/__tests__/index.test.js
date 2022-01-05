@@ -1,7 +1,7 @@
 import MyAdminAPI from '../../src/index'
 import server from '../__fixtures__/mock-service-worker'
 
-const testWithLiveGeoTabSandbox_BypassTheMockServiceWorker = true
+const testWithLiveGeoTabSandbox_BypassTheMockServiceWorker = false
 if(!testWithLiveGeoTabSandbox_BypassTheMockServiceWorker) {
 	beforeAll(() => {
 		server.listen()
