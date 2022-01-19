@@ -89,4 +89,4 @@ class MyAdminAPI {
 	}
 }
 
-module.exports = MyAdminAPI
+export default MyAdminAPI
