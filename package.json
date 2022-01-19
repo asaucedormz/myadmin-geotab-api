@@ -5,17 +5,16 @@
 		"url": "https://github.com/davidsabine"
 	},
 	"dependencies": {
-		"axios": "^0.24.0",
-		"node-fetch": "^3.1.0"
+		"axios": "^0.24.0"
 	},
 	"description": "Forked from https://github.com/asaucedormz/myadmin-geotab-api, then modified to use axios instead of old version of node-fetch.",
 	"devDependencies": {
-		"@babel/core": "^7.16.7",
-		"@babel/preset-env": "^7.16.7",
+		"@babel/core": "^7.16.10",
+		"@babel/preset-env": "^7.16.10",
 		"babel-jest": "^27.4.6",
 		"dotenv": "^10.0.0",
 		"jest": "^27.4.7",
-		"msw": "^0.36.3"
+		"msw": "^0.36.5"
 	},
 	"homepage": "https://github.com/DavidSabine/myadmin-geotab-api",
 	"jest": {
@@ -40,5 +39,5 @@
 	"scripts": {
 		"test": "jest --coverage --setupFiles dotenv/config"
 	},
-	"version": "1.0.3"
+	"version": "1.0.4"
 }
