@@ -24,25 +24,25 @@ $ npm i @davidsabine/myadmin-geotab-api
 
 The order of operations is:
 
-1. Require `myadmin-geotab-api` in your code.
-	```js
-	const MyAdminAPI = require('myadmin-geotab-api')
-	```
+1. Import `myadmin-geotab-api` in your code.
+```js
+import MyAdminAPI from '@davidsabine/myadmin-geotab-api'
+```
 
 2. Create an instance of the class object:
-	```js
-	const myAPI = new MyAdminAPI({<authentication parameters here>})
-	```
+```js
+const myAPI = new MyAdminAPI({<authentication parameters here>})
+```
 
 3. Tell that new instance to authenticate with GeoTab's server. This returns an object containing credentials, sessionId, apiKey, etc.
-	```js
-	myAPI.authenticate()
-	```
+```js
+myAPI.authenticate()
+```
 
 4. Then use `myAPI.call()` to perform actions against GeoTab's service. The return values will vary depending which method name you send to GeoTab's service:
-	```js
-	myAPI.call(<a method name>, {<parameters related to that method>})
-	```
+```js
+myAPI.call(<a method name>, {<parameters related to that method>})
+```
 
 
 Examples:
@@ -50,55 +50,60 @@ Examples:
 Using Async/Await Promises
 
 ```js
-const MyAdminAPI = require('myadmin-geotab-api');
+import MyAdminAPI from '@davidsabine/myadmin-geotab-api'
 
 (async function main() {
-	const username = 'your username'
-	const password = 'your password'
-	const testServerUrl = 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx'
-
-	const api = new MyAdminAPI({
-		username,
-		password,
-		testServerUrl // or omit to use prod
-	})
-	
-	// Call authenticate method:<Promise>
-	const authData = await api.authenticate()
-
-	// get list of countries
-	const countriesList = await api.call('GetCountries', {})
-
-	console.log(countriesList)
+	const username = process.env.YOURUSERNAME
+	const password = process.env.YOURPASSWORD
+	try	{
+		const api = new MyAdminAPI({
+			username,
+			password,
+			uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx'
+		})
+		const authData = await api.authenticate()
+		const result = await api.call(`GetCountries`, {})
+		if(result.error) {
+			console.log(result, `geotab responded with an error message`)
+		} else {
+			console.log(result, `the call was successful`)
+		}
+	} catch (error) {
+		console.log(error, `an error was thrown in your code`)
+	}
 })()
 ```
 
 Using Promises then catch
 
 ```js
-const MyAdminAPI = require('myadmin-geotab-api')
+import MyAdminAPI from '@davidsabine/myadmin-geotab-api'
 
-(function main() {
-	const username = process.env.GEOTAB_USERNAME
-	const password = process.env.GEOTAB_PASSWORD
-
+(async function main() {
+	const username = process.env.YOURUSERNAME
+	const password = process.env.YOURPASSWORD
 	const api = new MyAdminAPI({
 		username,
 		password,
+		uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx'
 	})
-
 	api
-		.authenticate()
-		.then(() =>
-			api.call('GetCountries', {})
-		)
-		.then((countriesList) => {
-			console.log(countriesList)
+	.authenticate()
+	.then(() => {
+		console.log(`You are authenticated!`)
+		api.call('GetCountries', {})
+		.then((theListofCountries) => {
+			console.log(theListofCountries, `the call was successful`)
 		})
-		.catch((err) => console.error(err))
+		.catch((err) => {
+			console.log(err, `geotab responded with an error message`)
+		})
+	})
+	.catch((err) => {
+		console.log(err, `an error was thrown in your code`)
+	})
 })()
 ```
-
 
 # Notes for users of previous version: <=0.1.2
 
@@ -142,64 +147,4 @@ If you implement `call()` or `post()` incorrectly, an exception will occur. But 
 }
 ```
 
-Examples:
-
-Receive error message from GeoTab's server
-
-```js
-const MyAdminAPI = require('myadmin-geotab-api')
-
-(() => {
-	const username = process.env.GEOTAB_USERNAME
-	const password = process.env.GEOTAB_PASSWORD
-
-	const api = new MyAdminAPI({
-		username,
-		password,
-		uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx'
-	})
-
-	api
-		.authenticate()
-		.then((result) =>
-			api.call('Wrong Method', { 'wrong': 'parameter' })
-		)
-		.then((result) => {
-			// The error message from GeoTab server is in the result
-			console.log(result)
-		})
-		.catch((err) => console.error(err))
-})()
-```
-
-Catch error in your code
-
-```js
-const MyAdminAPI = require('myadmin-geotab-api')
-
-(() => {
-	const username = process.env.GEOTAB_USERNAME
-	const password = process.env.GEOTAB_PASSWORD
-
-	const api = new MyAdminAPI({
-		username,
-		password,
-		uri: 'https://myadminapitest.geotab.com/v2/MyAdminApi.ashx'
-	})
-
-	api
-		.authenticate()
-		.then((result) =>
-			api.WRONG('you did something wrong')
-		)
-		.then((result) => {
-			// Error occured before http fetch could happen
-			// so, no result is available
-			console.log(result)
-		})
-		.catch((err) => {
-			// thrown error is available here
-			console.error(err)
-		})
-})()
-```
+See error handling in examples above.
