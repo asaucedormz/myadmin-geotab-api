@@ -36,6 +36,10 @@
 	"license": "MIT",
 	"main": "src/index.js",
 	"name": "@davidsabine/myadmin-geotab-api",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
 	"scripts": {
 		"test": "jest --coverage --setupFiles dotenv/config"
 	},
