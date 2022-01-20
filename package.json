@@ -1,16 +1,47 @@
 {
-  "name": "myadmin-geotab-api",
-  "version": "0.1.3",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "node-fetch": "^2.6.0"
-  },
-  "author": {
-    "name": "Alejandro Saucedo",
-    "email": "asaucedormz@outlook.com",
-    "url": "https://github.com/asaucedormz"
-    
-  },
-  "homepage": "https://github.com/asaucedormz/myadmin-geotab-api#readme"
+	"author": {
+		"name": "David Sabine",
+		"email": "david.sabine@live.com",
+		"url": "https://github.com/davidsabine"
+	},
+	"dependencies": {
+		"axios": "^0.24.0"
+	},
+	"description": "Forked from https://github.com/asaucedormz/myadmin-geotab-api, then modified to use axios instead of old version of node-fetch.",
+	"devDependencies": {
+		"@babel/core": "^7.16.10",
+		"@babel/preset-env": "^7.16.10",
+		"babel-jest": "^27.4.6",
+		"dotenv": "^10.0.0",
+		"jest": "^27.4.7",
+		"msw": "^0.36.5"
+	},
+	"homepage": "https://github.com/DavidSabine/myadmin-geotab-api",
+	"jest": {
+		"coveragePathIgnorePatterns": [
+			"/node_modules/",
+			"/test/__fixtures__/"
+		],
+		"testPathIgnorePatterns": [
+			"/node_modules/",
+			"/test/__fixtures__/"
+		],
+		"transform": {
+			"\\.[jt]sx?$": "babel-jest"
+		},
+		"transformIgnorePatterns": [
+			"/node_modules/"
+		]
+	},
+	"license": "MIT",
+	"main": "src/index.js",
+	"name": "@davidsabine/myadmin-geotab-api",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"scripts": {
+		"test": "jest --coverage --setupFiles dotenv/config"
+	},
+	"version": "2.0.2"
 }
